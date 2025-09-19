@@ -4,7 +4,7 @@ import pandas as pd
 import torch
 from sklearn.metrics import confusion_matrix
 
-from tg3.data.utils.transform_image import transform_image
+from tg3.utils.transform_image import transform_image
 
 
 class Labeller(ABC):

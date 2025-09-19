@@ -6,7 +6,6 @@ from tg3.utils.transform_image import transform_image
 from tg3.utils.labeller import RegressionLabeller, LabelledModel
 from tg3.utils.contact_model import ContactModel
 from tg3.utils.NNmodels import CNN, NatureCNN, ResNet, ResidualBlock
-
 # import tg3.tasks.utils.ros2_handler as ros2
 
 
@@ -81,7 +80,7 @@ def load_model(model_dir):
     labeller = RegressionLabeller(**label_params)
     in_dim, in_channels, out_dim = image_proc_params['dims'], 1, labeller.out_dim
 
-    model = setup_model(in_dim, in_channels, out_dim, model_params, model_dir)
+    model = setup_model(in_dim, in_channels, out_dim, model_params)
 
     return model, image_proc_params, labeller
 
@@ -94,7 +93,7 @@ def load_json_obj(name):
 def main(model_dir):
 
     sensor_params = load_json_obj(f"{model_dir}/sensor_image_params.json")
-    sensor_params["source"] = 0 
+    # sensor_params["source"] = 1 
     sensor = RealSensor(sensor_params)
 
     model, image_proc_params, labeller = load_model(model_dir)
@@ -104,29 +103,9 @@ def main(model_dir):
     run_live_loop(sensor, pose_model, contact_model)
 
 
-def parse(
-    path = './tactile_data',
-    robot = 'ur5',
-    sensor = 'tacpad',
-    experiment='surface_zRxy_shear',
-    predict='pose_zRxy',
-    model='simple_cnn',
-):
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--path', type=str, default=path, help='Root directory for tactile data')
-    parser.add_argument('-r', '--robot', type=str, default=robot, help='Robot type (e.g., sim)')
-    parser.add_argument('-s', '--sensor', type=str, default=sensor, help='Sensor type (e.g., tactip)')
-    parser.add_argument('-e', '--experiment', type=str, default=experiment, help='Experiment name')
-    parser.add_argument('-t', '--predict', type=str, default=predict, help='Prediction target (e.g., pose_yRz)')
-    parser.add_argument('-m', '--model', type=str, default=model, help='Model name (e.g., simple_cnn)')
-    return parser.parse_args()
-
-
 if __name__ == "__main__":
 
-    args = parse()
-
-    base_dir = f"{args.path}/{args.robot}_{args.sensor}/{args.experiment}"
-    model_dir = f"{base_dir}/regress_{args.predict}/{args.model}"
+    model_dir = f'./tactile_data/ur5_tacpad_1/surface_zRxy_shear/regress_pose_zRxy/simple_cnn'
+    # model_dir = f'./tactile_data/mg400_tactip/edge_xRz_shear/regress_pose_xRz/simple_cnn'
 
     main(model_dir)
