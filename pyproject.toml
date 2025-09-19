@@ -1,0 +1,53 @@
+[project]
+name = "tg3"
+version = "0.0.1"
+description = "Robot learning suite for tactile robotics"
+readme = "README.md"
+requires-python = "==3.10.*"
+
+license = { text = "MIT" } 
+authors = [
+  { name = "Nathan Lepora, Yijiong Lin, Harry Field, Kipp McAdam Freud", email = "n.lepora@bristol.ac.uk" },
+]
+
+dependencies = [
+    "hyperopt",
+    "matplotlib",
+    "numpy<=1.21.2",#<1.20.0", # for isaacgym
+    "opencv-python>=4.5.1",
+    "pandas",
+    "pynput",
+    "pytorch_model_summary",
+    "scikit-learn",
+    "scikit-image>=0.19.3",
+    "seaborn",
+    "tensorboard",
+    "torch>=2.4.1",
+    "torchvision>=0.19.1",
+    "transforms3d",
+    "vit-pytorch",
+    # pybullet libraries
+    "pybullet==3.2.7",
+    "stable_baselines3==1.2.1a0",
+    # isaac gym libraries
+    #"gymnasium",
+    #"ipdb",
+    #"kornia",
+    #"ray==2.10",
+    #"rl_games",
+    #"isaacgymenvs",
+    # apparently not needed
+    #"opensimplex==0.3",
+    #"h5py",
+    #"wheel==0.38.4",
+    #"six",
+    #"tqdm",
+]
+
+[tool.uv.sources]
+rl_games = { git = "https://github.com/Denys88/rl_games", rev = "b483bd62982f668e3fb4d457b418e56fae38ebf2" }
+isaacgymenvs = { path = "./IsaacGymTactileEnvs", editable = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
