@@ -106,10 +106,10 @@ def main(model_dir):
 
 def parse(
     path = './tactile_data',
-    robot = 'mg400',
-    sensor = 'tactip',
-    experiment='edge_xRz_shear',
-    predict='pose_xRz',
+    robot = 'ur5',
+    sensor = 'tacpad',
+    experiment='surface_zRxy_shear',
+    predict='pose_zRxy',
     model='simple_cnn',
 ):
     parser = argparse.ArgumentParser()
