@@ -1,14 +1,12 @@
-"""
-Use (shift, ctrl, arrow keys) to move robot
-"""
 import argparse
 import cv2
 import json
 
-from tg3.data.utils.transform_image import transform_image
-from tg3.learning.image_to_feature.cnn.labeller import RegressionLabeller, LabelledModel
-from tg3.learning.image_to_feature.train import setup_model
-from tg3.tasks.utils.contact_model import ContactModel
+from tg3.utils.transform_image import transform_image
+from tg3.utils.labeller import RegressionLabeller, LabelledModel
+from tg3.utils.contact_model import ContactModel
+from tg3.utils.NNmodels import CNN, NatureCNN, ResNet, ResidualBlock
+
 # import tg3.tasks.utils.ros2_handler as ros2
 
 
@@ -50,6 +48,28 @@ class RealSensor:
             cv2.imwrite(outfile, img)
         return img
     
+
+def setup_model(in_dim, in_channels, out_dim, model_params, device='cpu'):
+    """ Import CNN model """
+
+    model_type, kwargs = model_params['model_type'], model_params.get('model_kwargs', {})
+
+    if model_type.startswith(('posenet', 'simple_cnn')):
+        model = CNN(in_dim, in_channels, out_dim, device=device, **kwargs).to(device)
+        model.apply(model.weights_init_normal)
+
+    elif model_type.startswith('nature_cnn'):
+        model = NatureCNN(in_dim, in_channels, out_dim, **kwargs).to(device)
+        model.apply(model.weights_init_normal)
+
+    elif model_type.startswith('resnet'):
+        model = ResNet(ResidualBlock, in_channels, out_dim, **kwargs).to(device)
+
+    else:
+        raise ValueError(f'Incorrect model_type specified: {model_type}')
+
+    return model
+
 
 def load_model(model_dir):
     """ Set up the pose model and its parameters from the specified directory. """

@@ -1,0 +1,14 @@
+*.egg-info
+*.pyo
+*.pyc
+.vscode
+__pycache__/
+requirements.txt
+tactile_data/
+saved_models
+temp/
+
+# uv
+uv.lock
+!pyproject.toml
+.venv/
